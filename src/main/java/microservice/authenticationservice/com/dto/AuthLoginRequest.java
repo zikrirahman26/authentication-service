@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 public class AuthLoginRequest {
 
     @Size(min = 8, max = 25, message = "Username must have a minimum length of 8 and a maximum of 25")
-    @NotBlank(message = "Username must not be blank.")
+    @NotBlank(message = "Username must not be blank")
     private String username;
 
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$",
-            message = "Password must have at least 8 characters, including uppercase, lowercase, number, and special character (!@#$%^&*)."
+            message = "Password must have at least 8 characters, including uppercase, lowercase, number, and special character (!@#$%^&*)"
     )
     private String password;
 }
