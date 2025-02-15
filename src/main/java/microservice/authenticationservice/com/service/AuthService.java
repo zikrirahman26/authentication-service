@@ -1,9 +1,9 @@
 package microservice.authenticationservice.com.service;
 
-import microservice.authenticationservice.com.dto.AuthLoginRequest;
-import microservice.authenticationservice.com.dto.AuthTokenResponse;
+import microservice.authenticationservice.com.dto.LoginRequest;
+import microservice.authenticationservice.com.dto.TokenResponse;
 
 public interface AuthService {
 
-    AuthTokenResponse login(AuthLoginRequest authLoginRequest);
+    TokenResponse login(LoginRequest loginRequest);
 }

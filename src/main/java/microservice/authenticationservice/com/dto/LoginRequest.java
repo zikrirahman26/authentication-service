@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthLoginRequest {
+public class LoginRequest {
 
     @Size(min = 8, max = 25, message = "Username must have a minimum length of 8 and a maximum of 25")
     @NotBlank(message = "Username must not be blank")

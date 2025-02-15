@@ -1,10 +1,11 @@
 package microservice.authenticationservice.com.service.impl;
 
-import microservice.authenticationservice.com.dto.AuthLoginRequest;
-import microservice.authenticationservice.com.dto.AuthTokenResponse;
-import microservice.authenticationservice.com.entity.UserEntity;
-import microservice.authenticationservice.com.repository.UserRepository;
-import microservice.authenticationservice.com.security.JwtService;
+import lombok.RequiredArgsConstructor;
+import microservice.authenticationservice.com.dto.LoginRequest;
+import microservice.authenticationservice.com.dto.TokenResponse;
+import microservice.authenticationservice.com.entity.UserManagement;
+import microservice.authenticationservice.com.repository.UserManagementRepository;
+import microservice.authenticationservice.com.security.JwtServiceGenerator;
 import microservice.authenticationservice.com.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,33 +14,28 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
-
-    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository) {
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.userRepository = userRepository;
-    }
+    private final JwtServiceGenerator jwtServiceGenerator;
+    private final UserManagementRepository userManagementRepository;
 
     @Override
-    public AuthTokenResponse login(AuthLoginRequest authLoginRequest) {
-        UserEntity userEntity = userRepository.findByUsername(authLoginRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User with username " + authLoginRequest.getUsername() + " not found"));
+    public TokenResponse login(LoginRequest loginRequest) {
+        UserManagement userManagement = userManagementRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + loginRequest.getUsername() + " not found"));
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authLoginRequest.getUsername(), authLoginRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password incorrect");
         }
 
-        String token = jwtService.generateToken(userEntity.getUsername());
+        String token = jwtServiceGenerator.generateToken(userManagement);
 
-        return AuthTokenResponse.builder()
+        return TokenResponse.builder()
                 .token(token)
                 .build();
     }
