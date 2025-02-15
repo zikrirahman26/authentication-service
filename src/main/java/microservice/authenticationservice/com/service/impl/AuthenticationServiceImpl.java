@@ -6,7 +6,7 @@ import microservice.authenticationservice.com.dto.TokenResponse;
 import microservice.authenticationservice.com.entity.UserManagement;
 import microservice.authenticationservice.com.repository.UserManagementRepository;
 import microservice.authenticationservice.com.security.JwtServiceGenerator;
-import microservice.authenticationservice.com.service.AuthService;
+import microservice.authenticationservice.com.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Service
-public class AuthServiceImpl implements AuthService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtServiceGenerator jwtServiceGenerator;

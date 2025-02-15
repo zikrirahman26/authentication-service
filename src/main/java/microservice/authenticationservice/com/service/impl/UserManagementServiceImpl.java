@@ -1,7 +1,7 @@
 package microservice.authenticationservice.com.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import microservice.authenticationservice.com.config.ApplicationConfig;
+import microservice.authenticationservice.com.config.ApplicationConfiguration;
 import microservice.authenticationservice.com.dto.RegistrationRequest;
 import microservice.authenticationservice.com.dto.UserManagementResponse;
 import microservice.authenticationservice.com.entity.UserManagement;
@@ -18,7 +18,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     private final UserManagementRepository userManagementRepository;
     private final ValidationRequest validationRequest;
-    private final ApplicationConfig applicationConfig;
+    private final ApplicationConfiguration applicationConfiguration;
 
     @Override
     public UserManagementResponse userRegistration(RegistrationRequest registrationRequest) {
@@ -33,7 +33,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is already in use");
         }
 
-        String encodePassword = applicationConfig.passwordEncoder().encode(registrationRequest.getPassword());
+        String encodePassword = applicationConfiguration.passwordEncoder().encode(registrationRequest.getPassword());
 
         UserManagement userManagement = getUserManagement(registrationRequest, encodePassword);
 
