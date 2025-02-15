@@ -1,18 +1,18 @@
-package microservice.authenticationservice.com.utils;
+package microservice.authenticationservice.com.service;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
-public class ValidationRequest {
+public class ValidationService {
 
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
 
     public void validationRequest(Object request) {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(request);

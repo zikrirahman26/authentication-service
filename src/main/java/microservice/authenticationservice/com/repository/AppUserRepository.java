@@ -1,15 +1,15 @@
 package microservice.authenticationservice.com.repository;
 
-import microservice.authenticationservice.com.entity.UserManagement;
+import microservice.authenticationservice.com.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserManagementRepository extends JpaRepository<UserManagement, Long> {
+public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-    Optional<UserManagement> findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 
     boolean existsByEmail(String email);
 

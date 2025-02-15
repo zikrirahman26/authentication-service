@@ -1,6 +1,6 @@
 package microservice.authenticationservice.com.model;
 
-public enum RoleType {
+public enum AppUserRole {
 
     USER,
     ADMIN,
