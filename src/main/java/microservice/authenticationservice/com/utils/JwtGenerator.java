@@ -1,4 +1,4 @@
-package microservice.authenticationservice.com.service;
+package microservice.authenticationservice.com.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public final class JwtService {
+public final class JwtGenerator {
 
     @Value("${spring.security.jwt.secret}")
     private String SECRET_KEY;

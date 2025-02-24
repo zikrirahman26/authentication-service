@@ -1,4 +1,4 @@
-package microservice.authenticationservice.com.service;
+package microservice.authenticationservice.com.utils;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
-public class ValidationService {
+public class ValidationRequest {
 
     private final Validator validator;
 

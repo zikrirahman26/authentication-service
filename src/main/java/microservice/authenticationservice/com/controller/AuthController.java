@@ -1,7 +1,9 @@
 package microservice.authenticationservice.com.controller;
 
 import lombok.RequiredArgsConstructor;
-import microservice.authenticationservice.com.dto.*;
+import microservice.authenticationservice.com.dto.ApiResponse;
+import microservice.authenticationservice.com.dto.LoginRequest;
+import microservice.authenticationservice.com.dto.TokenResponse;
 import microservice.authenticationservice.com.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
