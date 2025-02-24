@@ -6,6 +6,7 @@ import microservice.authenticationservice.com.dto.TokenResponse;
 import microservice.authenticationservice.com.entity.AppUser;
 import microservice.authenticationservice.com.model.AppUserRole;
 import microservice.authenticationservice.com.repository.AppUserRepository;
+import microservice.authenticationservice.com.service.impl.AuthServiceImpl;
 import microservice.authenticationservice.com.utils.JwtGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceTest {
+class AuthServiceImplTest {
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -43,7 +44,7 @@ class AuthServiceTest {
     private JwtGenerator jwtGenerator;
 
     @InjectMocks
-    private AuthService authService;
+    private AuthServiceImpl authServiceImpl;
 
     private LoginRequest loginRequest;
     private AppUser appUser;
@@ -70,7 +71,7 @@ class AuthServiceTest {
         when(appUserRepository.findByUsername("testuser")).thenReturn(Optional.of(appUser));
         when(jwtGenerator.generateToken(appUser)).thenReturn("testToken");
 
-        TokenResponse response = authService.login(loginRequest);
+        TokenResponse response = authServiceImpl.login(loginRequest);
 
         assertNotNull(response);
         assertEquals("testToken", response.getToken());
@@ -82,9 +83,9 @@ class AuthServiceTest {
         when(appUserRepository.findByUsername("testuser")).thenReturn(Optional.of(appUser));
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenThrow(new BadCredentialsException(""));
 
-        assertThrows(ResponseStatusException.class, () -> authService.login(loginRequest));
+        assertThrows(ResponseStatusException.class, () -> authServiceImpl.login(loginRequest));
         try{
-            authService.login(loginRequest);
+            authServiceImpl.login(loginRequest);
         }catch(ResponseStatusException e){
             assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
             assertEquals("Password incorrect", e.getReason());
@@ -95,7 +96,7 @@ class AuthServiceTest {
     void login_UserNotFound_ThrowsUsernameNotFoundException() {
         when(appUserRepository.findByUsername("nonexistentuser")).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> authService.login(new LoginRequest("nonexistentuser", "password")));
+        assertThrows(UsernameNotFoundException.class, () -> authServiceImpl.login(new LoginRequest("nonexistentuser", "password")));
     }
 
     @Test
@@ -104,7 +105,7 @@ class AuthServiceTest {
         when(bCryptPasswordEncoder.matches("oldPassword", "encodedPassword")).thenReturn(true);
         when(bCryptPasswordEncoder.encode("newPassword")).thenReturn("newEncodedPassword");
 
-        authService.changePassword(changePasswordRequest, "testuser");
+        authServiceImpl.changePassword(changePasswordRequest, "testuser");
 
         assertEquals("newEncodedPassword", appUser.getPassword());
         verify(appUserRepository).save(appUser);
@@ -114,7 +115,7 @@ class AuthServiceTest {
     void changePassword_UserNotFound_ThrowsUsernameNotFoundException() {
         when(appUserRepository.findByUsername("nonexistentuser")).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> authService.changePassword(changePasswordRequest, "nonexistentuser"));
+        assertThrows(UsernameNotFoundException.class, () -> authServiceImpl.changePassword(changePasswordRequest, "nonexistentuser"));
     }
 
     @Test
@@ -122,9 +123,9 @@ class AuthServiceTest {
         when(appUserRepository.findByUsername("testuser")).thenReturn(Optional.of(appUser));
         when(bCryptPasswordEncoder.matches("oldPassword", "encodedPassword")).thenReturn(false);
 
-        assertThrows(ResponseStatusException.class, () -> authService.changePassword(changePasswordRequest, "testuser"));
+        assertThrows(ResponseStatusException.class, () -> authServiceImpl.changePassword(changePasswordRequest, "testuser"));
         try{
-            authService.changePassword(changePasswordRequest, "testuser");
+            authServiceImpl.changePassword(changePasswordRequest, "testuser");
         }catch(ResponseStatusException e){
             assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
             assertEquals("Old password incorrect", e.getReason());
@@ -137,9 +138,9 @@ class AuthServiceTest {
         when(bCryptPasswordEncoder.matches("oldPassword", "encodedPassword")).thenReturn(true);
         changePasswordRequest.setNewPassword("oldPassword");
 
-        assertThrows(ResponseStatusException.class, () -> authService.changePassword(changePasswordRequest, "testuser"));
+        assertThrows(ResponseStatusException.class, () -> authServiceImpl.changePassword(changePasswordRequest, "testuser"));
         try{
-            authService.changePassword(changePasswordRequest, "testuser");
+            authServiceImpl.changePassword(changePasswordRequest, "testuser");
         }catch(ResponseStatusException e){
             assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
             assertEquals("New password cannot be the same", e.getReason());
