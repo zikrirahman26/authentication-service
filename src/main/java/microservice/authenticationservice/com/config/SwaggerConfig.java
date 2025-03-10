@@ -1,4 +1,4 @@
-package microservice.authenticationservice.com.swagger;
+package microservice.authenticationservice.com.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
